@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,4 +34,31 @@ public class Post {
             referencedColumnName = "id"
     )
     private Subreddit subreddit;
+
+    @OneToMany(
+            targetEntity = Vote.class,
+            mappedBy = "post",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private List<Vote> votes;
+
+    @OneToMany(
+            targetEntity = Comment.class,
+            mappedBy = "post",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private List<Comment> comments;
+
+    public Post(Long postId, String postName, String url, String description, Integer voteCount, Instant createdDate, User user, Subreddit subreddit) {
+        this.postId = postId;
+        this.postName = postName;
+        this.url = url;
+        this.description = description;
+        this.voteCount = voteCount;
+        this.createdDate = createdDate;
+        this.user = user;
+        this.subreddit = subreddit;
+    }
 }
